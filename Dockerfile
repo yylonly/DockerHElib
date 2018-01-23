@@ -38,6 +38,7 @@ Run cd HElib/src \
 # Eigen: C++ Matrix Library 
 # Install in /usr/local/include/eigen3/Eigen
 RUN wget http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz \
+    && tar -zxvf 3.3.4.tar.gz \
 	&& cd eigen-eigen-5a0156e40feb \
 	&& mkdir build \
 	&& cd build \
