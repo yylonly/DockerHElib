@@ -2,7 +2,7 @@ FROM buildpack-deps
 
 LABEL Description="MCloud HElib"
 
-RUN apt-get update && apt install cmake -y
+RUN apt-get update && apt install cmake vim -y 
 
 # For Mount you code
 RUN mkdir /sourcerepo
