@@ -6,6 +6,7 @@ RUN apt-get update && apt install net-tools cmake vim ssh g++ gdb gdbserver -y
 
 RUN echo 'root:xpp' | chpasswd
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN mkdir /var/run/sshd
 
 # For Mount you code
 RUN mkdir /sourcerepo
@@ -23,32 +24,32 @@ RUN wget https://ftp.gnu.org/gnu/gmp/gmp-6.1.2.tar.bz2 \
 
 # NTL: C++ A Library for doing Number Theory
 RUN wget http://www.shoup.net/ntl/ntl-10.5.0.tar.gz \
-	&& tar -zxvf ntl-10.5.0.tar.gz \
-	&& cd ntl-10.5.0/src \
-	&& ./configure PREFIX=/usr/local/ntl NTL_GMP_LIP=on GMP_PREFIX=/usr/local/gmp NTL_THREAD_BOOST=on \
-	&& make \
-	&& make install \
-	&& cd / 
+        && tar -zxvf ntl-10.5.0.tar.gz \
+        && cd ntl-10.5.0/src \
+        && ./configure PREFIX=/usr/local/ntl NTL_GMP_LIP=on GMP_PREFIX=/usr/local/gmp NTL_THREAD_BOOST=on \
+        && make \
+        && make install \
+        && cd /
 
 # HELib: C++ Homomorphic Encryption Library
-RUN git clone https://github.com/shaih/HElib 
+RUN git clone https://github.com/shaih/HElib
 COPY Makefile /HElib/src
 Run cd HElib/src \
-	&& make \
-	&& make check \
-	&& cd /
+        && make \
+        && make check \
+        && cd /
 
-# Eigen: C++ Matrix Library 
+# Eigen: C++ Matrix Library
 # Install in /usr/local/include/eigen3/Eigen
 RUN wget http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz \
     && tar -zxvf 3.3.4.tar.gz \
-	&& cd eigen-eigen-5a0156e40feb \
-	&& mkdir build \
-	&& cd build \
-	&& cmake .. \
-	&& make install \
-	&& cd / 
-
+        && cd eigen-eigen-5a0156e40feb \
+        && mkdir build \
+        && cd build \
+        && cmake .. \
+        && make install \
+        && cd /
 
 EXPOSE 22
-CMD ["/etc/init.d/ssh", "start"]
+CMD ["/usr/sbin/sshd", "-D"]
+
