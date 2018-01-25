@@ -2,7 +2,10 @@ FROM buildpack-deps
 
 LABEL Description="MCloud HElib"
 
-RUN apt-get update && apt install cmake vim -y 
+RUN apt-get update && apt install net-tools cmake vim ssh g++ gdb gdbserver -y 
+
+RUN echo 'root:xpp' | chpasswd
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # For Mount you code
 RUN mkdir /sourcerepo
@@ -45,3 +48,7 @@ RUN wget http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz \
 	&& cmake .. \
 	&& make install \
 	&& cd / 
+
+
+EXPOSE 22
+CMD ["/etc/init.d/ssh", "start"]
